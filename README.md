@@ -5,3 +5,4 @@ My exam program - Galua fields realization with primitive element (fast multiply
 Author - azzgzz.<br/>
 Theory by MASTIS - mech-mat - MSU
 
+MainTests.java contains main method
