@@ -1,49 +1,51 @@
-package ru.azzgzz.gf;
+package ru.azzgzz.gf.polynomial;
 
 
-import static ru.azzgzz.gf.StaticField.*;
+import ru.azzgzz.gf.numbers.ZpNumber;
+import ru.azzgzz.gf.field.StaticField;
 
-public class Polynom {
+
+public class PolynomOld {
 
     private int deg;
     private ZpNumber[] pol;
 
 
-    Polynom() {
+    public PolynomOld() {
         deg = 0;
-        pol = new ZpNumber[maxDeg + 1];
-        for (int i = 0; i < maxDeg + 1; i++) {
+        pol = new ZpNumber[StaticField.getMaxDeg() + 1];
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             pol[i] = new ZpNumber();
         }
     }
 
 
-    Polynom(Polynom x) {
+    public PolynomOld(PolynomOld x) {
         setDeg(x.getDeg());
         setPol(x.getPol());
     }
 
-    Polynom(int[] p) {
+    public PolynomOld(int[] p) {
         setDeg(p.length - 1);
-        this.pol = new ZpNumber[maxDeg + 1];
+        this.pol = new ZpNumber[StaticField.getMaxDeg() + 1];
         for (int i = 0; i < p.length; i++) {
-            pol[i] = new ZpNumber(p[i] % characteristic);
+            pol[i] = new ZpNumber(p[i] % StaticField.getCharacteristic());
         }
-        for (int i = p.length; i < maxDeg + 1; i++) {
+        for (int i = p.length; i < StaticField.getMaxDeg() + 1; i++) {
             pol[i] = new ZpNumber(0);
         }
 
-        for (int i = 0; i < maxDeg + 1; i++) {
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             if (!pol[i].isZero())
                 deg = i;
         }
     }
 
-    Polynom(int x) {
+    public PolynomOld(int x) {
         deg = 0;
-        pol = new ZpNumber[maxDeg + 1];
+        pol = new ZpNumber[StaticField.getMaxDeg() + 1];
         pol[0] = new ZpNumber(x);
-        for (int i = 1; i < maxDeg + 1; i++) {
+        for (int i = 1; i < StaticField.getMaxDeg() + 1; i++) {
             pol[i] = new ZpNumber();
         }
     }
@@ -61,8 +63,8 @@ public class Polynom {
     }
 
     public void setPol(ZpNumber[] pol) {
-        this.pol = new ZpNumber[maxDeg + 1];
-        for (int i = 0; i < maxDeg + 1; i++) {
+        this.pol = new ZpNumber[StaticField.getMaxDeg() + 1];
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             //System.out.print(pol[i]);
             this.pol[i] = new ZpNumber(pol[i]);
             //System.out.println(" " + this.pol[i]);
@@ -70,43 +72,43 @@ public class Polynom {
     }
 
 
-    public Polynom plus(Polynom x) {
-        Polynom a = new Polynom();
+    public PolynomOld plus(PolynomOld x) {
+        PolynomOld a = new PolynomOld();
         a.setDeg(getDeg() > x.getDeg() ? getDeg() : x.getDeg());
 
-        ZpNumber[] p = new ZpNumber[maxDeg + 1];
+        ZpNumber[] p = new ZpNumber[StaticField.getMaxDeg() + 1];
         ZpNumber[] p1 = getPol();
         ZpNumber[] p2 = x.getPol();
 
-        for (int i = 0; i < maxDeg + 1; i++) {
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             p[i] = p1[i].plus(p2[i]);
             //System.out.println(p[i]);
         }
 
         a.setPol(p);
-        for (int i = 0; i < maxDeg + 1; i++) {
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             if (!a.pol[i].isZero())
                 a.deg = i;
         }
         return a;
     }
 
-    public Polynom minus(Polynom x) {
-        Polynom a = new Polynom();
+    public PolynomOld minus(PolynomOld x) {
+        PolynomOld a = new PolynomOld();
         a.setDeg(getDeg() > x.getDeg() ? getDeg() : x.getDeg());
 
-        ZpNumber[] p = new ZpNumber[maxDeg + 1];
+        ZpNumber[] p = new ZpNumber[StaticField.getMaxDeg() + 1];
         ZpNumber[] p1 = getPol();
         ZpNumber[] p2 = x.getPol();
 
-        for (int i = 0; i < maxDeg + 1; i++) {
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             p[i] = p1[i].minus(p2[i]);
             //System.out.println(p[i]);
         }
 
         a.setPol(p);
         a.deg = 0;
-        for (int i = 0; i < maxDeg + 1; i++) {
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             if (!a.pol[i].isZero())
                 a.deg = i;
         }
@@ -114,40 +116,24 @@ public class Polynom {
         return a;
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public Polynom mult(Polynom x) {
-        return this;
-    }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public Polynom div(Polynom x) {
-        return this;
-    }
-
-
-    public Polynom simpleMult(Polynom x) throws Exception {
-        Polynom a, b;
-        Polynom mult = new Polynom();
+    public PolynomOld simpleMult(PolynomOld x) throws Exception {
+        PolynomOld a, b;
+        PolynomOld mult = new PolynomOld();
 
         if (isMore(x)) {
-            a = new Polynom(this);
-            b = new Polynom(x);
+            a = new PolynomOld(this);
+            b = new PolynomOld(x);
         } else {
-            b = new Polynom(this);
-            a = new Polynom(x);
+            b = new PolynomOld(this);
+            a = new PolynomOld(x);
         }
 
         for (int i = b.getDeg(); i > 0; i--) {
             mult = mult.plus(a.scalarMult(b.pol[i]));
             mult = mult.leftShift();
-            if (mult.deg >= modulo.deg)
-                mult = mult.simpleMod(modulo);
+//            if (mult.deg >= StaticField.getModulo().deg)
+//                mult = mult.simpleMod(StaticField.getModulo());
         }
 
         mult = mult.plus(a.scalarMult(b.pol[0]));
@@ -156,8 +142,8 @@ public class Polynom {
     }
 
 
-    public Polynom scalarMult(ZpNumber x) {
-        Polynom a = new Polynom(this);
+    public PolynomOld scalarMult(ZpNumber x) {
+        PolynomOld a = new PolynomOld(this);
 
         for (int i = 0; i < deg + 1; i++) {
             a.pol[i] = a.pol[i].mult(x);
@@ -165,18 +151,18 @@ public class Polynom {
         return a;
     }
 
-    public Polynom leftShift() {
-        Polynom a = new Polynom(this);
+    public PolynomOld leftShift() {
+        PolynomOld a = new PolynomOld(this);
 
         a.deg++;
-        for (int i = maxDeg; i > 0; i--) {
+        for (int i = StaticField.getMaxDeg(); i > 0; i--) {
             a.pol[i] = a.pol[i - 1];
         }
         a.pol[0] = new ZpNumber();
         return a;
     }
 
-    public boolean isMore(Polynom x) {
+    public boolean isMore(PolynomOld x) {
         if (getDeg() >= x.getDeg())
             return true;
         return false;
@@ -188,22 +174,22 @@ public class Polynom {
         return false;
     }
 
-    public Polynom simpleMod(Polynom x) throws Exception {
+    public PolynomOld simpleMod(PolynomOld x) throws Exception {
         if (!isMore(x))
             return this;
 
-        Polynom a = new Polynom(this);
-        Polynom b;
+        PolynomOld a = new PolynomOld(this);
+        PolynomOld b;
 
         while (a.deg >= x.deg) {
-            b = new Polynom(x);
+            b = new PolynomOld(x);
             while (b.deg < a.deg) {
                 b = b.leftShift();
             }
             a = a.minus(b.scalarMult(a.pol[a.deg].div(b.pol[b.deg])));
         }
 
-        for (int i = 0; i < maxDeg + 1; i++) {
+        for (int i = 0; i < StaticField.getMaxDeg() + 1; i++) {
             if (!a.pol[i].isZero())
                 a.deg = i;
         }
@@ -212,16 +198,7 @@ public class Polynom {
     }
 
 
-    @Deprecated
-    public Polynom toPowerOf(int p) {
-        Polynom a = new Polynom(this);
 
-        for (int i = 1; i < p; i++) {
-            // a = (a.mult(a).simpleMod(modilo);
-
-        }
-        return null;/////////////////////////////////////////////////////////////////////// !!!!!!!!!!
-    }
 
     @Override
     public String toString() {
@@ -239,7 +216,7 @@ public class Polynom {
     }
 
 
-    public Polynom plusOneNorm() {
+    public PolynomOld plusOneNorm() {
         int i = 0;
         while (i < deg) {
             pol[i].plusOne();
@@ -250,7 +227,7 @@ public class Polynom {
         return this;
     }
 
-    public Polynom plusOne() {
+    public PolynomOld plusOne() {
         int i = 0;
         while (i <= deg) {
             pol[i].plusOne();
