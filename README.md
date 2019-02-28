@@ -1,4 +1,4 @@
-# GaluaField
+# GaloisField
 
 Galois fields realization with primitive element (fast multiplying).
 
