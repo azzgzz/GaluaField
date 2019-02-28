@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GaluaField.iml" filepath="$PROJECT_DIR$/GaluaField.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GaloisField.iml" filepath="$PROJECT_DIR$/GaloisField.iml" />
     </modules>
   </component>
 </project>
