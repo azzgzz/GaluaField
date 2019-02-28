@@ -1,6 +1,5 @@
 package ru.azzgzz.gf;
 
-//import java.util.Scanner;
 
 import ru.azzgzz.gf.field.FieldController;
 import ru.azzgzz.gf.field.Irreducible;
